@@ -5,6 +5,7 @@ import time
 import bluetooth
 import sys
 import subprocess
+from os import system
 
 # --------- User Settings ---------
 WEIGHT_SAMPLES = 100
@@ -112,7 +113,8 @@ class Wiiboard:
         self.receivesocket.connect((address, 0x13))
         self.controlsocket.connect((address, 0x11))
         if self.receivesocket and self.controlsocket:
-            print "Connected! Now run the icon called 'Second'" #+ address
+            print "Connected!" #+ address
+            system('python3 /home/pi/planet_scale/planets.py &')
             self.status = "Connected"
             self.address = address
             self.calibrate()
@@ -163,14 +165,14 @@ class Wiiboard:
     def discover(self):
         print "Press the sync button on the bottom of the board now"
         address = None
-        bluetoothdevices = bluetooth.discover_devices(duration=6, lookup_names=True)
-        for bluetoothdevice in bluetoothdevices:
-            if bluetoothdevice[1] == BLUETOOTH_NAME:
-                address = bluetoothdevice[0]
-                #print "Found Wiiboard at address " + address
-        if address is None:
-            print "No Wiiboards discovered."
-        return address
+        while True:
+            bluetoothdevices = bluetooth.discover_devices(lookup_names=True)
+            for bluetoothdevice in bluetoothdevices:
+                if bluetoothdevice[1] == BLUETOOTH_NAME:
+                    address = bluetoothdevice[0]
+                    #print "Found Wiiboard at address " + address
+            if address is not None:
+                return address
 
     def createBoardEvent(self, bytes):
         buttonBytes = bytes[0:2]

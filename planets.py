@@ -119,8 +119,10 @@ class ScaleScreen(Screen):
                         'Pluto': 0.0635}
             
         if self.current_world != 'Bennu':    
+            #self.kg_label.text = str(round(self.kg*factor[self.current_world])) + ' kg'
             self.lb_label.text = str(round(self.kg*factor[self.current_world]*2.20462)) + ' lbs'
         else:
+            #self.kg_label.text = str(npround(self.kg*factor[self.current_world], 5)) + ' kg'
             self.lb_label.text = str(npround(self.kg*factor[self.current_world]*2.20462, 5)) + ' lbs'
            
     def toggle_language(self, *args):
@@ -177,10 +179,14 @@ class ScaleScreen(Screen):
         weight_box = BoxLayout(orientation='horizontal',
                                 size_hint=(1,0.35))
         
+        #self.kg_label = Label(text='0 kg',
+        #                        font_size=200,
+        #                        size_hint=(0.5,1))
         self.lb_label = Label(text='0 lbs',
                                 font_size=200,
                                 size_hint=(0.5,1))
         
+        #weight_box.add_widget(self.kg_label)
         weight_box.add_widget(self.lb_label)
         
         self.button_box = GridLayout(cols=4, rows=2,
